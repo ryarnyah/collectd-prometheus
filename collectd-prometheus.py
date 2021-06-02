@@ -60,6 +60,9 @@ class PrometheusProcess(object):
                 self.timeout = int(children.values[0])
             if children.key == KEY_SSL_IGNORE:
                 self.ssl_ignore = bool(children.values[0])
+                if self.ssl_ignore:
+                    import urllib3
+                    urllib3.disable_warnings()
             if children.key == KEY_SSL_CERT:
                 self.ssl_cert = children.values[0]
             if children.key == KEY_SSL_KEY:
