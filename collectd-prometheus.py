@@ -94,7 +94,7 @@ class Prometheus(object):
             kwargs = {}
 
             if process.ssl_ignore is not None:
-                kwargs.update({'verify': process.ssl_ignore})
+                kwargs.update({'verify': not process.ssl_ignore})
             if process.ssl_cert is not None and process.ssl_key is not None:
                 kwargs.update({'cert': (process.ssl_cert, process.ssl_key)})
             if process.ssl_cacert is not None:
