@@ -17,6 +17,6 @@ Vagrant.configure("2") do |config|
     systemctl start collectd
     systemctl enable collectd
 
-    cd /vagrant && pip install -r requirements.txt
+    cd /vagrant && pip install .
   SHELL
 end
