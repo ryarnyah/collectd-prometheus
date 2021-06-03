@@ -4,14 +4,8 @@ A collectd Python plugin to read Prometheus metrics endpoints
 
 ## Installation
 
-1. Download `collectd-prometheus.py` into a folder, e.g.
-   `/usr/lib/collectd/python`
-1. Download `requirements.txt` and install the dependencies required:
-   ```terminal
-   # pip install -r requirements.txt
-   ```
-   You need to check which Python version your collectd is built against to
-   know which python/pip binary to use. So e.g. with Debian:
+1. Find out which version of Python your collectd is built against to know
+   which python/pip binary to use. So e.g. with Debian:
    ```terminal
    $ dpkg -S python.so | grep collectd
    collectd-core: /usr/lib/collectd/python.so
@@ -21,6 +15,10 @@ A collectd Python plugin to read Prometheus metrics endpoints
    ```
    which uses Python 2.7 still so I need to use `pip2` when installing the
    dependencies.
+1. Install `collectd-prometheus`:
+   ```terminal
+   # pip2 install collectd-prometheus
+   ```
 
 ## Usage
 1. Create a collectd configuration e.g.
@@ -28,9 +26,8 @@ A collectd Python plugin to read Prometheus metrics endpoints
 ```apache
 LoadPlugin python
 <Plugin python>
-    ModulePath "/usr/lib/collectd/python" # This is the folder we downloaded collectd-prometheus.py into before
-    Import "collectd-prometheus"
-    <Module "collectd-prometheus">
+    Import "collectd_prometheus"
+    <Module "collectd_prometheus">
        Interval 30 # How often to scrape metrics. This is the default, can be omitted
        <Process>
            Process "mycoolservice" # Name this instance, e.g. after what service you're scraping
