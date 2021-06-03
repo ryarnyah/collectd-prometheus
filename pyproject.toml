@@ -6,6 +6,8 @@ authors = ["Ryar Nyah <ryarnyah@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "~2.7 || ^3.6"
+prometheus-client = "^0.7.1"
+requests = "^2.25.1"
 
 [tool.poetry.dev-dependencies]
 
