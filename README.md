@@ -51,11 +51,10 @@ LoadPlugin python
 In Python, using a virtual environment [is the
 recommended](https://docs.python.org/3/tutorial/venv.html) way to isolate your
 applications dependencies from other applications. To use a virtualenv with
-collectd we have to create one, activate it, install the dependencies into it
-and then copy the `collectd-prometheus.py` module into it.
+collectd we have to create one, activate it, install our package into it.
 
-1. Using the steps listed [Installation](#installation) figure out which Python version
-   collectd uses.
+1. Using the steps listed [Installation](#installation) figure out which Python
+   version collectd uses.
 1. If python3 use `venv` which is included in Python 3. When using Python 2.7,
    we have to [install
    virtualenv](https://virtualenv.pypa.io/en/latest/installation.html) which
@@ -65,28 +64,23 @@ and then copy the `collectd-prometheus.py` module into it.
    ```terminal
    # python -m virtualenv /usr/lib/collectd/prom
    ```
-1. Activate it and install dependencies, e.g.:
+1. Activate it and install our package, e.g.:
    ```terminal
    # source /usr/lib/collectd/prom/bin/activate
-   (prom) # pip install -r requirements.txt
+   (prom) # pip install collectd-prometheus
    ```
 1. Find your virtualenvs site-packages folder, e.g:
    ```terminal
    # find /usr/lib/collectd/prom/ -type d -iname "site-packages"
    /usr/lib/collectd/prom/lib/python2.7/site-packages
    ```
-1. Copy in `collectd-prometheus.py` to the directory we found, e.g:
-   directory, e.g:
-   ```terminal
-   # cp collectd-prometheus.py /usr/lib/collectd/prom/lib/python2.7/site-packages
-   ```
-1. Configure collectd to look for `collectd-prometheus.py` and it's
-   dependencies in the directory that you found in step 5. E.g:
+1. Configure collectd to look for `collectd-prometheus` and it's dependencies
+   in the directory that you found in step 5. E.g:
 
    ```apache
    LoadPlugin python
    <Plugin python>
        ModulePath "/usr/lib/collectd/prom/lib/python2.7/site-packages" # Right here
-       Import "collectd-prometheus"
+       Import "collectd_prometheus"
    […]
    ```
