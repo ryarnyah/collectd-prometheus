@@ -1,20 +1,16 @@
----
-name: Python package
+name: Release
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+      - '*.*.*'
 
 jobs:
-  build:
-
+  Release:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [2.7, 3.9]
-
+        python-version: [3.9]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -26,3 +22,7 @@ jobs:
           pip install poetry==1.1.6
       - name: Build project
         run: poetry build
+      - name: Publish to PyPI
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: poetry publish
