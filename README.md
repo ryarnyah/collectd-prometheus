@@ -4,14 +4,8 @@ A collectd Python plugin to read Prometheus metrics endpoints
 
 ## Installation
 
-1. Download `collectd-prometheus.py` into a folder, e.g.
-   `/usr/lib/collectd/python`
-1. Download `requirements.txt` and install the dependencies required:
-   ```terminal
-   # pip install -r requirements.txt
-   ```
-   You need to check which Python version your collectd is built against to
-   know which python/pip binary to use. So e.g. with Debian:
+1. Find out which version of Python your collectd is built against to know
+   which python/pip binary to use. So e.g. with Debian:
    ```terminal
    $ dpkg -S python.so | grep collectd
    collectd-core: /usr/lib/collectd/python.so
@@ -21,6 +15,10 @@ A collectd Python plugin to read Prometheus metrics endpoints
    ```
    which uses Python 2.7 still so I need to use `pip2` when installing the
    dependencies.
+1. Install `collectd-prometheus`:
+   ```terminal
+   # pip2 install collectd-prometheus
+   ```
 
 ## Usage
 1. Create a collectd configuration e.g.
@@ -28,9 +26,8 @@ A collectd Python plugin to read Prometheus metrics endpoints
 ```apache
 LoadPlugin python
 <Plugin python>
-    ModulePath "/usr/lib/collectd/python" # This is the folder we downloaded collectd-prometheus.py into before
-    Import "collectd-prometheus"
-    <Module "collectd-prometheus">
+    Import "collectd_prometheus"
+    <Module "collectd_prometheus">
        Interval 30 # How often to scrape metrics. This is the default, can be omitted
        <Process>
            Process "mycoolservice" # Name this instance, e.g. after what service you're scraping
@@ -54,11 +51,10 @@ LoadPlugin python
 In Python, using a virtual environment [is the
 recommended](https://docs.python.org/3/tutorial/venv.html) way to isolate your
 applications dependencies from other applications. To use a virtualenv with
-collectd we have to create one, activate it, install the dependencies into it
-and then copy the `collectd-prometheus.py` module into it.
+collectd we have to create one, activate it, install our package into it.
 
-1. Using the steps listed [Installation](#installation) figure out which Python version
-   collectd uses.
+1. Using the steps listed [Installation](#installation) figure out which Python
+   version collectd uses.
 1. If python3 use `venv` which is included in Python 3. When using Python 2.7,
    we have to [install
    virtualenv](https://virtualenv.pypa.io/en/latest/installation.html) which
@@ -68,28 +64,23 @@ and then copy the `collectd-prometheus.py` module into it.
    ```terminal
    # python -m virtualenv /usr/lib/collectd/prom
    ```
-1. Activate it and install dependencies, e.g.:
+1. Activate it and install our package, e.g.:
    ```terminal
    # source /usr/lib/collectd/prom/bin/activate
-   (prom) # pip install -r requirements.txt
+   (prom) # pip install collectd-prometheus
    ```
 1. Find your virtualenvs site-packages folder, e.g:
    ```terminal
    # find /usr/lib/collectd/prom/ -type d -iname "site-packages"
    /usr/lib/collectd/prom/lib/python2.7/site-packages
    ```
-1. Copy in `collectd-prometheus.py` to the directory we found, e.g:
-   directory, e.g:
-   ```terminal
-   # cp collectd-prometheus.py /usr/lib/collectd/prom/lib/python2.7/site-packages
-   ```
-1. Configure collectd to look for `collectd-prometheus.py` and it's
-   dependencies in the directory that you found in step 5. E.g:
+1. Configure collectd to look for `collectd-prometheus` and it's dependencies
+   in the directory that you found in step 5. E.g:
 
    ```apache
    LoadPlugin python
    <Plugin python>
        ModulePath "/usr/lib/collectd/prom/lib/python2.7/site-packages" # Right here
-       Import "collectd-prometheus"
+       Import "collectd_prometheus"
    […]
    ```
