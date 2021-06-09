@@ -6,6 +6,7 @@ authors = ["Ryar Nyah <ryarnyah@gmail.com>"]
 homepage = "https://github.com/ryarnyah/collectd-prometheus"
 repository = "https://github.com/ryarnyah/collectd-prometheus"
 readme = "README.md"
+license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "~2.7 || ^3.6"
