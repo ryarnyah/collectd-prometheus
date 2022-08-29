@@ -26,6 +26,7 @@ PLUGIN_NAME = 'prometheus'
 DEFAULT_INTERVAL = 30
 DEFAULT_TIMEOUT = 30
 DEFAULT_PROTOCOL = 'http'
+DEFAULT_URI = '/metrics'
 DEFAULT_HOST = '127.0.0.1'
 DEFAULT_PORT = '8080'
 DEFAULT_PROCESS = 'unknown'
@@ -36,6 +37,7 @@ KEY_PROTOCOL = 'Protocol'
 KEY_INTERVAL = 'Interval'
 KEY_PORT = 'Port'
 KEY_HOST = 'Host'
+KEY_URI = 'Uri'
 KEY_REGEX_FILTER = 'Filter'
 KEY_TIMEOUT = 'Timeout'
 KEY_SSL_IGNORE = 'SslIgnore'
@@ -51,6 +53,7 @@ class PrometheusProcess(object):
         self.process = DEFAULT_PROCESS
         self.host = DEFAULT_HOST
         self.port = DEFAULT_PORT
+        self.uri = DEFAULT_URI
         self.protocol = DEFAULT_PROTOCOL
         self.timeout = DEFAULT_TIMEOUT
         self.regex_filters = []
@@ -67,6 +70,8 @@ class PrometheusProcess(object):
                 self.host = children.values[0]
             if children.key == KEY_PORT:
                 self.port = children.values[0]
+            if children.key == KEY_URI:
+                self.uri = children.values[0]
             if children.key == KEY_PROTOCOL:
                 self.protocol = children.values[0]
             if children.key == KEY_TIMEOUT:
@@ -119,7 +124,7 @@ class Prometheus(object):
                 kwargs.update({'timeout': process.timeout})
 
             try:
-              metrics = requests.get("%s://%s:%s/metrics" % (process.protocol, process.host, process.port), **kwargs).content
+              metrics = requests.get("%s://%s:%s%s" % (process.protocol, process.host, process.port, process.uri), **kwargs).content.decode()
               for family in text_string_to_metric_families(metrics):
                   for sample in family.samples:
                       # Normalize metric name
@@ -146,7 +151,7 @@ class Prometheus(object):
                       else:
                           collectd.debug("Name: {0} not match Labels: {1} Value: {2}".format(*sample))
             except Exception as e:
-                collectd.error('unable to get prometheus data %s://%s:%s/metrics with current configuration %s: %s' % (process.protocol, process.host, process.port, json.dumps(process.__dict__), e))
+                collectd.error('unable to get prometheus data %s://%s:%s%s with current configuration %s: %s' % (process.protocol, process.host, process.port, process.uri, json.dumps(process.__dict__), e))
 
 def init():
     signal.signal(signal.SIGCHLD, signal.SIG_DFL)
