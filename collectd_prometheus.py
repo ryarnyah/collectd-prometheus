@@ -119,7 +119,7 @@ class Prometheus(object):
                 kwargs.update({'timeout': process.timeout})
 
             try:
-              metrics = requests.get("%s://%s:%s/metrics" % (process.protocol, process.host, process.port), **kwargs).content
+              metrics = requests.get("%s://%s:%s/metrics" % (process.protocol, process.host, process.port), **kwargs).content.decode()
               for family in text_string_to_metric_families(metrics):
                   for sample in family.samples:
                       # Normalize metric name
